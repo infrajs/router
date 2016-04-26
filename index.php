@@ -32,7 +32,11 @@ infrajs\path\Path::init();
 //Контроллер... должен быть файл в корне index.json
 //Если сайт не использует контроллер то до этого места доходим только, когда 404 и лишний запуск не существенен
 //Либо следующая строчка обеспечивает формирование всего html если контроллер используется.
-infrajs\controller\Controller::init();
+
+$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
+if (!in_array($query{0}, ['~', '!', '-'])) {
+	infrajs\controller\Controller::init();
+}
 
 $conf = infrajs\config\Config::get('router');
 infrajs\path\Path::req($conf['404']);
