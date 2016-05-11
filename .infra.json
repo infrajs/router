@@ -1,3 +1,4 @@
 {
-	"404":"-router/404.php"
+	"404":"-router/404.php",
+	"conf":"\\infrajs\\router\\Router"
 }
