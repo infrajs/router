@@ -17,7 +17,7 @@ if (!is_file('vendor/autoload.php')) {
 	require_once('vendor/autoload.php');	
 	Router::init();
 }
-$src = Path::theme('-test/test.php'); //vendor/test/test.php
+$src = Path::theme('-plugin/test.php'); //vendor/name/plugin/test.php
 ```
 Если настроен .htaccess
 ```
