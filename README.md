@@ -44,6 +44,7 @@ if (!is_file('vendor/autoload.php')) {
 infrajs/router представляет собой базовую зависимость для всех новых расширений. Позволяет интегрировать стороннее расширение в среду infrajs. Используется в расширениях
  - [oduvanio/teremok](https://github.com/oduvanio/teremok)
  - [infrajs/imager](https://github.com/infrajs/imager)
+ - [angelcharly/weather](https://github.com/ange187/weather)
 
 ## Перенаправить запросы на свой php файлы
 С точки зрения роутера все запросы, для которых не найдено файла, являются 404 ошибкой. По этому нужно определить 404 страницу, как php файл, на который и будут приходить все запросы.
