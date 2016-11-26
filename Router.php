@@ -65,7 +65,8 @@ class Router {
 		//Либо следующая строчка обеспечивает формирование всего html если контроллер используется.
 
 		$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
-		if (!in_array($query{0}, ['~', '!', '-'])) {
+		$ch = substr($query,0,1);
+		if (!in_array($ch, ['~', '!', '-'])) {
 			Controller::init();
 		}
 
