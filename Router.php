@@ -71,9 +71,9 @@ class Router {
 		$ch = substr($query,0,1);
 		if (!in_array($ch, ['~', '!', '-'])) {
 			Controller::init();
+		} else {
+			$conf = Config::get('router');
+			Path::req($conf['404']);
 		}
-
-		$conf = Config::get('router');
-		Path::req($conf['404']);
 	}
 }
