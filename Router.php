@@ -92,12 +92,12 @@ class Router {
 		//Контроллер... должен быть файл в корне index.json
 		//Если сайт не использует контроллер то до этого места доходим только, когда 404 и лишний запуск не существенен
 		//Либо следующая строчка обеспечивает формирование всего html если контроллер используется.
+		$r = false;
+		if (Router::$main) $r = Controller::init();
 
-		if (Router::$main) {
-			Controller::init();
+		if (!$r) {
+			$conf = Config::get('router');
+			Path::req($conf['404']);
 		}
-
-		$conf = Config::get('router');
-		Path::req($conf['404']);
 	}
 }
