@@ -94,7 +94,6 @@ class Router {
 		//Либо следующая строчка обеспечивает формирование всего html если контроллер используется.
 		$r = false;
 		if (Router::$main) $r = Controller::init();
-
 		if (!$r) {
 			$conf = Config::get('router');
 			Path::req($conf['404']);
