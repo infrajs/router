@@ -7,15 +7,23 @@ use infrajs\controller\Controller;
 use infrajs\config\search\Search;
 use infrajs\path\Path;
 use infrajs\once\Once;
+use infrajs\env\Env;
 use infrajs\config\Config;
 
 class Router {
+	static public $main = false; //Метка что содержание страницы для пользователя
 	static public $conf = array(
 		"404" => "-router/404.php"
 	);
 	static public function init()
 	{
 		Once::exec(__FILE__, function () {
+			
+
+			//Роутре работает в двух режимах
+			$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
+			$ch = substr($query,0,1);
+			Router::$main = (!$query || !in_array($ch, ['~', '!', '-']));
 
 			//Список операций выполняющихся при любом запросе со спецсимволом в адресе [-~!] и при запросах без файлов
 			//или при яном вызове в скрипте Router::init();
@@ -40,16 +48,34 @@ class Router {
 			//Cоздаются папка cache и для расширения mem создаётся папка cache/mem, если их нет
 			//Наличие этих папок, например, обязательно для Search, который кэширует свою работу
 			//Во время обновления запускаются тесты
+			//Требуется для Search так как там срабатываешь кэширование
 			Update::init();
 
-			
 
 			//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
 			//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен
-			Access::modified(); 
+			if (static::$main) {
+				
+				Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
+				Env::init();
+				Access::modified(Env::getName()); 
+				
+				if (Env::get('nostore')) {
+					//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
+					Nostore::on();
+				} else if (Env::$defined) { //Ключ что окружение изменено пользователем
+					Nostore::offPrivate();
+				} else {
+					Nostore::init();
+				}
 
-			//Заголовки по умолчанию для Cache-Controll
-			Nostore::init();
+			} else {
+				
+				Access::modified(); 
+
+				//Заголовки по умолчанию для Cache-Controll
+				Nostore::init();
+			}
 
 			//Вспомогательные заголовки с информацией о правах пользователя test debug admin
 			Access::headers();
@@ -67,9 +93,7 @@ class Router {
 		//Если сайт не использует контроллер то до этого места доходим только, когда 404 и лишний запуск не существенен
 		//Либо следующая строчка обеспечивает формирование всего html если контроллер используется.
 
-		$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
-		$ch = substr($query,0,1);
-		if (!in_array($ch, ['~', '!', '-'])) {
+		if (Router::$main) {
 			Controller::init();
 		}
 
