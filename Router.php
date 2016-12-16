@@ -52,35 +52,33 @@ class Router {
 			Update::init();
 
 
-			//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
-			//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен
+			//Заголовки по умолчанию для Cache-Controll
+			Nostore::init();
+
+			
 			if (static::$main) {
 				
 				Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
+				
+
 				Env::init();
+
 				Access::modified(Env::getName()); 
 				
 				if (Env::get('nostore')) {
 					//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
 					Nostore::on();
-				} else if (Env::$defined) { //Ключ что окружение изменено пользователем
+				} else if (Env::$defined && !Nostore::is()) { //Ключ что окружение изменено пользователем
 					Nostore::offPrivate();
-				} else {
-					Nostore::init();
 				}
-
-			} else {
 				
+			} else {
+				//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
+				//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен	
 				Access::modified(); 
-
-				//Заголовки по умолчанию для Cache-Controll
-				Nostore::init();
 			}
-
 			//Вспомогательные заголовки с информацией о правах пользователя test debug admin
 			Access::headers();
-
-			
 		});
 	}
 	static public function apply()
