@@ -63,7 +63,7 @@ class Router {
 
 				Env::init();
 
-				Access::modified(Env::getName()); 
+				Access::modified(Env::name()); 
 				
 				if (Env::get('nostore')) {
 					//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
