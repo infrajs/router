@@ -8,6 +8,7 @@ use infrajs\config\search\Search;
 use infrajs\path\Path;
 use infrajs\once\Once;
 use infrajs\env\Env;
+use akiyatkin\error\Error;
 use infrajs\config\Config;
 
 class Router {
@@ -32,6 +33,8 @@ class Router {
 			//Теперь при первом обащении к классу расширения будет собираться его конфиг .infra.json из папки расширения
 			Config::init();
 			
+			//Показываем и скрываем ошибки в зависимости от режима
+			Error::init();
 
 			//Анализируется папка vendor Находятся все производители поддерживающие конфигурационные файлы .infra.json
 			//Некий производитель angelcharly попадёт в список поиска, если у него есть библиотека с файлом .infra.json
@@ -59,9 +62,6 @@ class Router {
 			if (static::$main) {
 				
 				Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
-				
-
-				Env::init();
 
 				Access::modified(Env::name()); 
 				
