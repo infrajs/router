@@ -56,8 +56,10 @@ class Router {
 
 
 			//Заголовки по умолчанию для Cache-Controll
-			Nostore::init();
 
+			Nostore::init(Router::$main);
+
+			
 			
 			if (static::$main) {
 				
@@ -78,6 +80,7 @@ class Router {
 				Access::modified(); 
 			}
 			//Вспомогательные заголовки с информацией о правах пользователя test debug admin
+			
 			Access::headers();
 		});
 	}
