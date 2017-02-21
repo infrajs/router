@@ -16,15 +16,15 @@ class Router {
 	static public $conf = array(
 		"404" => "-router/404.php"
 	);
-	static public function init()
+	static public function init($main = false) //true если файл не найден
 	{
-		Once::exec(__FILE__, function () {
+		Once::exec(__FILE__, function () use ($main) {
 			
 
 			//Роутре работает в двух режимах
 			$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
 			$ch = substr($query,0,1);
-			Router::$main = (!$query || !in_array($ch, ['~', '!', '-']));
+			Router::$main = $main && (!$query || !in_array($ch, ['~', '!', '-']));
 
 			//Список операций выполняющихся при любом запросе со спецсимволом в адресе [-~!] и при запросах без файлов
 			//или при яном вызове в скрипте Router::init();
@@ -58,7 +58,6 @@ class Router {
 			//Заголовки по умолчанию для Cache-Controll
 
 			Nostore::init(Router::$main);
-
 			
 			
 			if (static::$main) {

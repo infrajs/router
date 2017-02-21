@@ -8,6 +8,6 @@ use infrajs\config\Config;
 chdir('../../../');
 require_once('vendor/autoload.php');
 
-Router::init();
+Router::init(true);
 
 Router::apply();
