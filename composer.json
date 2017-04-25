@@ -14,7 +14,6 @@
 		"infrajs/nostore":"~1",
 		"infrajs/access":"~1",
 		"infrajs/env":"~1",
-		"infrajs/config-search":"~1",
 		"infrajs/update":"~1"
 	}
 }
