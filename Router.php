@@ -4,7 +4,6 @@ use infrajs\update\Update;
 use infrajs\access\Access;
 use infrajs\nostore\Nostore;
 use infrajs\controller\Controller;
-use infrajs\config\search\Search;
 use infrajs\path\Path;
 use infrajs\once\Once;
 use infrajs\env\Env;
