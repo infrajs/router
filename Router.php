@@ -32,8 +32,10 @@ class Router {
 		//Собирается конфиг .infra.json из корня проекта
 		//Теперь при первом обащении к классу расширения будет собираться его конфиг .infra.json из папки расширения
 		Config::init();
-		
+		Config::get('router');
 		//Показываем и скрываем ошибки в зависимости от режима
+
+
 		Error::init();
 
 		//Заголовки по умолчанию для Cache-Controll
@@ -42,6 +44,7 @@ class Router {
 		if (Router::$main) {
 
 			Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
+			
 			Access::modified(Env::name()); 
 			
 			if (Env::get('nostore')) {
