@@ -39,8 +39,8 @@ class Router {
 		Error::init();
 
 		//Заголовки по умолчанию для Cache-Controll
+		Update::check();
 		Nostore::init(Router::$main);
-		
 		if (Router::$main) {
 
 			Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
