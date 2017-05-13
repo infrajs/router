@@ -39,7 +39,6 @@ class Router {
 		Error::init();
 
 		//Заголовки по умолчанию для Cache-Controll
-		Update::check();
 		Nostore::init(Router::$main);
 		if (Router::$main) {
 
@@ -60,7 +59,7 @@ class Router {
 			Access::modified(); 
 		}
 		//Вспомогательные заголовки с информацией о правах пользователя test debug admin
-		
+		Update::check();
 		Access::headers();
 	}
 	static public function apply()
