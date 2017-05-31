@@ -44,6 +44,8 @@ class Router {
 
 			Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
 			
+			//Установка системы до обращения к Окружению
+			Update::check();
 			Access::modified(Env::name()); 
 			
 			if (Env::get('nostore')) {
@@ -56,10 +58,10 @@ class Router {
 		} else {
 			//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
 			//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен	
+			Update::check();
 			Access::modified(); 
 		}
 		//Вспомогательные заголовки с информацией о правах пользователя test debug admin
-		Update::check();
 		Access::headers();
 	}
 	static public function apply()
