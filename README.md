@@ -30,8 +30,10 @@ RewriteRule ^(.*)$ vendor/infrajs/router/index.php [L,QSA]
 use infrajs\path\Path;
 
 $src = Path::theme('-test/test.php'); //vendor/test/test.php
+
+## Инициализация роутера в скрипте
 ```
-Желательно оставлять возможность прямого обращения к файлам, без сокращений:
+Для независимой работы расширения можно оставлять возможность прямого обращения к нему, без сокращений **-**, тогда в код нужно добавить вызов '''Router::init();'''. Это требуется для инициализации и выполнения конфигов ([.infra.json](https://github.com/infrajs/config)) самого расширения и его зависимостей.
 ```php
 if (!is_file('vendor/autoload.php')) {
 	chdir('../../../');
