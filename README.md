@@ -35,15 +35,16 @@ $src = Path::theme('-test/test.php'); //vendor/test/test.php
 ```php
 if (!is_file('vendor/autoload.php')) {
 	chdir('../../../');
-	require_once('vendor/autoload.php');	
+	require_once('vendor/autoload.php');
 	Router::init();
 }
+
 ```
 
-или
+или самый универальный вариант
 
 ```php
-if(!is_file('vendor/autoload.php')) chdir('../');
+if (!is_file('vendor/autoload.php')) chdir('../');
 require_once('vendor/autoload.php');
 Router::init();
 ```
