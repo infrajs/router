@@ -2,7 +2,6 @@
 	"name": "infrajs/router",
 	"homepage":"https://github.com/infrajs/router",
 	"description":"Router for Infrajs",
-	"license": "GPL3",
 	"autoload": {
 		"psr-4": { "infrajs\\router\\": "" }
 	},
