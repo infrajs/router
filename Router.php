@@ -17,52 +17,50 @@ class Router {
 	);
 	static public function init($main = false) //true если файл не найден
 	{
+		Once::func( function () use ($main) {
+			//Роутре работает в двух режимах
+			$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
+			$ch = substr($query,0,1);
+			Router::$main = $main && (!$query || !in_array($ch, ['~', '!', '-']));
 
-		if (Once::omit(__FILE__)) return;
+			//Список операций выполняющихся при любом запросе со спецсимволом в адресе [-~!] и при запросах без файлов
+			//или при яном вызове в скрипте Router::init();
 			
-
-		//Роутре работает в двух режимах
-		$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
-		$ch = substr($query,0,1);
-		Router::$main = $main && (!$query || !in_array($ch, ['~', '!', '-']));
-
-		//Список операций выполняющихся при любом запросе со спецсимволом в адресе [-~!] и при запросах без файлов
-		//или при яном вызове в скрипте Router::init();
-		
-		//Собирается конфиг .infra.json из корня проекта
-		//Теперь при первом обащении к классу расширения будет собираться его конфиг .infra.json из папки расширения
-		Config::init();
-		Config::get('router');
-		//Показываем и скрываем ошибки в зависимости от режима
+			//Собирается конфиг .infra.json из корня проекта
+			//Теперь при первом обащении к классу расширения будет собираться его конфиг .infra.json из папки расширения
+			Config::init();
+			Config::get('router');
+			//Показываем и скрываем ошибки в зависимости от режима
 
 
-		Error::init();
+			Error::init();
 
-		//Заголовки по умолчанию для Cache-Controll
-		Nostore::init(Router::$main);
-		if (Router::$main) {
+			//Заголовки по умолчанию для Cache-Controll
+			Nostore::init(Router::$main);
+			if (Router::$main) {
 
-			Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
-			
-			//Установка системы до обращения к Окружению
-			Update::check();
-			Access::modified(Env::name()); 
-			
-			if (Env::get('nostore')) {
-				//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
-				Nostore::on();
-			} else if (Env::$defined && !Nostore::is()) { //Ключ что окружение изменено пользователем
-				Nostore::offPrivate();
+				Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
+				
+				//Установка системы до обращения к Окружению
+				Update::check();
+				Access::modified(Env::name()); 
+				
+				if (Env::get('nostore')) {
+					//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
+					Nostore::on();
+				} else if (Env::$defined && !Nostore::is()) { //Ключ что окружение изменено пользователем
+					Nostore::offPrivate();
+				}
+				
+			} else {
+				//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
+				//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен	
+				Update::check();
+				Access::modified(); 
 			}
-			
-		} else {
-			//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
-			//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен	
-			Update::check();
-			Access::modified(); 
-		}
-		//Вспомогательные заголовки с информацией о правах пользователя test debug admin
-		Access::headers();
+			//Вспомогательные заголовки с информацией о правах пользователя test debug admin
+			Access::headers();
+		});
 	}
 	static public function apply()
 	{
