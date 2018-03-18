@@ -62,12 +62,16 @@ class Router {
 			Access::headers();
 		});
 	}
+	static public $end = false;
 	static public function apply()
 	{
 		//Поиск совпадения адреса с файлом
 		//Редирект также кэшируется в modified, когда обращение к статике, по правилам Nostore
 		$r = Path::init();
-		if ($r) return;
+		if ($r) {
+			Router::$end = true;
+			return;
+		}
 
 		//Контроллер... должен быть файл в корне index.json
 		//Если сайт не использует контроллер то до этого места доходим только, когда 404 и лишний запуск не существенен
@@ -78,5 +82,6 @@ class Router {
 			$conf = Config::get('router');
 			Path::req($conf['404']);
 		}
+		Router::$end = true;
 	}
 }
