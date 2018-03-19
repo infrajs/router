@@ -17,7 +17,7 @@ class Router {
 	);
 	static public function init($main = false) //true если файл не найден
 	{
-		Once::func( function () use ($main) {
+		//Once::func( function () use ($main) {
 			//Роутре работает в двух режимах
 			$query = substr(urldecode($_SERVER['REQUEST_URI']), 1);
 			$ch = substr($query,0,1);
@@ -60,7 +60,7 @@ class Router {
 			}
 			//Вспомогательные заголовки с информацией о правах пользователя test debug admin
 			Access::headers();
-		});
+		//});
 	}
 	static public $end = false;
 	static public function apply()
