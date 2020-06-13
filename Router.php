@@ -3,6 +3,7 @@ namespace infrajs\router;
 use infrajs\update\Update;
 use infrajs\access\Access;
 use infrajs\nostore\Nostore;
+use infrajs\nostore\Modified;
 use infrajs\controller\Controller;
 use infrajs\path\Path;
 use infrajs\once\Once;
@@ -36,14 +37,18 @@ class Router {
 			Error::init();
 
 			//Заголовки по умолчанию для Cache-Controll
-			Nostore::init(Router::$main);
+			//Nostore::init(Router::$main);
+			Nostore::init();
+
 			if (Router::$main) {
 
 				Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
 				
 				//Установка системы до обращения к Окружению
 				Update::check();
-				Access::modified(Env::name()); 
+
+				Modified::etagtime(Env::name(), Access::adminTime());
+
 				
 				if (Env::get('nostore')) {
 					//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
@@ -56,7 +61,7 @@ class Router {
 				//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
 				//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен	
 				Update::check();
-				Access::modified(); 
+				Modified::time(Access::adminTime());
 			}
 			//Вспомогательные заголовки с информацией о правах пользователя test debug admin
 			Access::headers();
