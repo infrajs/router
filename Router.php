@@ -34,7 +34,7 @@ class Router {
 
 
 			Error::init();
-
+			
 			//Заголовки по умолчанию для Cache-Controll
 			Nostore::init(Router::$main);
 			if (Router::$main) {
