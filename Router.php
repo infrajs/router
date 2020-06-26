@@ -39,32 +39,31 @@ class Router {
 			//Заголовки по умолчанию для Cache-Controll
 			//Nostore::init(Router::$main);
 			Nostore::init();
+			
+			if (Router::$main) Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки	
+
+			//Установка системы до обращения к Окружению
+			Update::check();
 
 			if (Router::$main) {
-
-				Config::get(); //Нужно собрать все расширения, чтобы выполнились все подписки
-				
-				//Установка системы до обращения к Окружению
-				Update::check();
-
 				Modified::etagtime(Env::name(), Access::adminTime());
-
-				
-				if (Env::get('nostore')) {
-					//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
-					Nostore::on();
-				} else if (Env::$defined && !Nostore::is()) { //Ключ что окружение изменено пользователем
-					Nostore::offPrivate();
-				}
-				
 			} else {
 				//По дате авторизации админа выход и если браузер прислал информацию что у него есть кэш
 				//Заголовок Cache-control:no-store в расширении Nostore::on() запретит создавать кэш, если станет ясно, что modfeied не нужен	
-				Update::check();
 				Modified::time(Access::adminTime());
 			}
+
+			if (Env::get('nostore')) {
+				//У Nostore кривое API хрен поймёшь, как этим Cache-control управлять.
+				Nostore::on();
+			} else if (Env::$defined && !Nostore::is()) { //Ключ что окружение изменено пользователем
+				//Если пользователь изменил окружение мы не хотим чтобы данный кэш сохранялся для всех
+				Nostore::offPrivate();
+			}
 			//Вспомогательные заголовки с информацией о правах пользователя test debug admin
+			
 			Access::headers();
+			
 		//});
 	}
 	static public $end = false;
@@ -72,6 +71,7 @@ class Router {
 	{
 		//Поиск совпадения адреса с файлом
 		//Редирект также кэшируется в modified, когда обращение к статике, по правилам Nostore
+		
 		$r = Path::init();
 		if ($r) {
 			Router::$end = true;
