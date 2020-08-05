@@ -6,7 +6,6 @@ use infrajs\nostore\Nostore;
 use infrajs\nostore\Modified;
 use infrajs\controller\Controller;
 use infrajs\path\Path;
-use infrajs\once\Once;
 use infrajs\env\Env;
 use akiyatkin\error\Error;
 use infrajs\config\Config;
